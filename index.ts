@@ -27,13 +27,11 @@ interface User {
 
 import express from "express";
 import { DataTypes, Sequelize } from "sequelize";
-import { groupBy } from "lodash";
 //import * as mysql2 from "mysql2";
 
 export const sequelize = new Sequelize("LDB", "stud", "vLXCDmSG6EpEnhXX", {
   host: "http://seklys.ila.lt:5080",
   dialect: "mysql",
-  //dialectModule: mysql2,
 });
 
 const tempStiprumas = sequelize.define("stiprumai", {
@@ -56,11 +54,55 @@ const tempStiprumas = sequelize.define("stiprumai", {
   },
 });
 
+const tempMatavimai = sequelize.define("matavimai", {
+  matavimas: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  x: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  y: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  atstumas: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+});
+
+const tempVartotojai = sequelize.define("vartotojai", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  mac: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  sensorius: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  stiprumas: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+});
+
+const tempStiprumasArray = await tempStiprumas.findAll();
+const tempMatavimaiArray = await tempMatavimai.findAll();
+const tempVartotojaiArray = await tempVartotojai.findAll();
+
 //const tempMatavimai = require("./data/matavimai.json");
 //const tempStiprumas = require("./data/stiprumai.json");
 //const tempVartotojai = require("./data/vartotojai.json");
-const stiprumai = tempStiprumas as Stiprumas[];
-const vartotojai = tempVartotojai as Vartotojas[];
+const stiprumai = tempStiprumasArray as Stiprumas[];
+const vartotojai = tempVartotojaiArray as Vartotojas[];
 
 const app = express();
 app.use(express.json());
@@ -103,7 +145,7 @@ macAddresses.forEach((mac: string) => {
 
 // console.table(users.map((user: User) => user.stiprumai));
 
-const matavimai: Matavimas[] = tempMatavimai.map((m: any): Matavimas => {
+const matavimai: Matavimas[] = tempMatavimaiArray.map((m: any): Matavimas => {
   return {
     matavimas: m.matavimas,
     x: m.x,
