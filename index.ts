@@ -86,6 +86,7 @@ app.listen(port, async () => {
     };
   });
 
+  // iprastas foreach ciklas, kuris suranda didziausias ir maziausias x ir y reiksmes zemelapio koordinatems zinoti
   let maxY = matavimai.reduce(
     (max: number, p: { y: number }) => (p.y > max ? p.y : max),
     matavimai[0].y
@@ -110,7 +111,7 @@ app.listen(port, async () => {
     p.y -= minY;
   });
 
-  // create a 2D array of zeros
+  // create a 2D array, where 1 means there is a measurement point and 0 means there is no measurement point
   for (let y = 0; y <= maxY; y++) {
     grid[y] = [];
     for (let x = 0; x <= maxX; x++) {
@@ -239,13 +240,13 @@ app.post("/", (req, res) => {
   try {
     userList.forEach((user: User) => {
       const rss1 = user.stiprumai.find(
-        (s: Stiprumas) => s.sensorius === WILI_BOX_1
+        (s: Stiprumas) => s.sensorius === WILI_BOX_1  // 20
       )?.stiprumas;
       const rss2 = user.stiprumai.find(
-        (s: Stiprumas) => s.sensorius === WILI_BOX_2
+        (s: Stiprumas) => s.sensorius === WILI_BOX_2 // 10
       )?.stiprumas;
       const rss3 = user.stiprumai.find(
-        (s: Stiprumas) => s.sensorius === WILI_BOX_3
+        (s: Stiprumas) => s.sensorius === WILI_BOX_3  // 8
       )?.stiprumas;
 
       var indexOfMatavimas = 0;
